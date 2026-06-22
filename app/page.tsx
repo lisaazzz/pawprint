@@ -52,6 +52,7 @@ const emptyAnswers: QuizAnswers = {
 
 const steps = ["Profile", "Personality", "Energy", "Wellness", "Goal", "Results"];
 const storageKey = "pawprint-quiz-v1";
+const recordEmail = "holisticpawfood@gmail.com";
 
 export default function Home() {
   const [started, setStarted] = useState(false);
@@ -292,6 +293,10 @@ function buildCustomerRecordRows(answers: QuizAnswers, result: ReturnType<typeof
     ["Ingredient proteins", result.ingredientProfile.bestProteins.join("; ")],
     ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")]
   ];
+}
+
+function buildCustomerRecordPayload(answers: QuizAnswers, result: ReturnType<typeof scoreQuiz>) {
+  return Object.fromEntries(buildCustomerRecordRows(answers, result));
 }
 
 function Landing({ onStart }: { onStart: () => void }) {
@@ -661,6 +666,57 @@ function Results({
 }) {
   const dogName = answers.profile.name || "Your dog";
   const sortedElements = Object.entries(result.elementPercents).sort((a, b) => b[1] - a[1]);
+  const [recordStatus, setRecordStatus] = useState<"idle" | "sending" | "sent" | "error" | "local">(
+    "idle"
+  );
+
+  useEffect(() => {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      setRecordStatus("local");
+      return;
+    }
+
+    const recordId = `pawprint-record-${btoa(
+      encodeURIComponent(JSON.stringify({ profile: answers.profile, result }))
+    ).slice(0, 80)}`;
+
+    if (window.localStorage.getItem(recordId)) {
+      setRecordStatus("sent");
+      return;
+    }
+
+    async function sendRecord() {
+      setRecordStatus("sending");
+      try {
+        const payload = {
+          _subject: `New PawPrint result: ${dogName}`,
+          _template: "table",
+          _captcha: "false",
+          source: window.location.href,
+          submittedAt: new Date().toISOString(),
+          ...buildCustomerRecordPayload(answers, result)
+        };
+
+        const response = await fetch(`https://formsubmit.co/ajax/${recordEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("Record email failed");
+        window.localStorage.setItem(recordId, "sent");
+        setRecordStatus("sent");
+      } catch {
+        setRecordStatus("error");
+      }
+    }
+
+    void sendRecord();
+  }, [answers, dogName, result]);
 
   return (
     <div className="space-y-5">
@@ -831,9 +887,18 @@ function Results({
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm leading-6 text-neutral-600">
-            Save a copy of this completed assessment for your own records. Automatic owner
-            notifications need a form, email, or database connection.
+            A copy of this completed assessment is sent to Holistic PawFood for customer records.
+            You can also download or copy the record manually.
           </p>
+          <div className="rounded-xl bg-paw-secondary/55 p-4 text-sm font-semibold text-neutral-700">
+            {recordStatus === "sending" && "Sending record to Holistic PawFood..."}
+            {recordStatus === "sent" && `Record sent to ${recordEmail}.`}
+            {recordStatus === "error" &&
+              "Automatic record sending could not complete. Please use Download Record CSV or Copy Record."}
+            {recordStatus === "local" &&
+              "Local preview mode: automatic email sending will run on the live Vercel site."}
+            {recordStatus === "idle" && "Preparing customer record..."}
+          </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="secondary" onClick={onDownloadRecord}>
               <Download className="h-4 w-4" />
