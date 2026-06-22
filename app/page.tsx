@@ -1213,17 +1213,76 @@ function recipeIngredients(name: string) {
   return ingredients[name] || ["Whole protein", "Vegetables", "Moisture", "Balanced fats"];
 }
 
+function recipeSpecificBenefits(name: string) {
+  const benefits: Record<string, string[]> = {
+    "GC Beef Greens": [
+      "Beef and greens offer steady, mineral-rich nourishment",
+      "Works well when a grounding Earth-Metal recipe is useful",
+      "A practical option for dogs needing vitality without an overly cooling profile"
+    ],
+    "GC Chicken Harmony": [
+      "Chicken and pumpkin make this a gentle, easy-to-understand meal profile",
+      "Especially useful when digestion and steady routine are priorities",
+      "Neutral-warming support can suit dogs who need comfort without excess richness"
+    ],
+    "GC Porky Beefy": [
+      "Pork and beef provide deeper nourishment for dogs needing more substance",
+      "A strong Water-Earth option for comfort, mobility, and healthy aging goals",
+      "Helpful when the profile calls for warmth and sustained energy"
+    ],
+    "GC Rabbit Sockeye": [
+      "Rabbit keeps the profile light while sockeye brings omega-rich support",
+      "A standout cooling choice for warm, itchy, or skin-focused profiles",
+      "Good for active Fire or Wood dogs who need balance without heaviness"
+    ],
+    "GC Pork Complete": [
+      "Pork gives satisfying nourishment while the cooling-neutral profile keeps it balanced",
+      "Useful when Fire or Metal traits need support without pushing too much warmth",
+      "A polished middle path for dogs who need skin support and steady fuel"
+    ],
+    "GC Turkey Recipe": [
+      "Turkey offers a lean, neutral base that is easy to rotate",
+      "A smart choice for weight, digestion, or balanced-energy goals",
+      "Pairs well with Earth and Wood profiles that need clean, steady fuel"
+    ],
+    "Chicken Recipe": [
+      "Chicken is familiar and gentle for many dogs when transitions need to be simple",
+      "Supports Earth-style digestion and routine-focused feeding",
+      "Best suited as a steady, uncomplicated comfort recipe"
+    ],
+    "Pork Red": [
+      "Pork with cooling-supportive red ingredients fits warm, expressive profiles",
+      "Useful when skin, coat, and antioxidant support are part of the picture",
+      "A flavorful option for Fire-Wood tendencies without going too warming"
+    ],
+    "Beef Dandelion Zucchini": [
+      "Beef supports vitality while dandelion and zucchini add green balance",
+      "A good fit for Wood dogs who benefit from liver-style green support",
+      "Works well when the goal is grounded energy with lighter vegetable support"
+    ],
+    "Duck Recipe": [
+      "Duck brings rich flavor while staying cooling in this recipe profile",
+      "A strong option for warm dogs who need skin, coat, or seasonal comfort support",
+      "Fits Fire, Wood, and Metal patterns with a more premium rotation feel"
+    ],
+    "Lamb Recipe": [
+      "Lamb provides warming nourishment for dogs who seek comfort and warmth",
+      "A strong Water-style option for aging, mobility, or low-energy profiles",
+      "Best when the plan calls for deeper warmth rather than cooling balance"
+    ]
+  };
+  return benefits[name] || ["Matches the overall PawPrint food profile", "Offers a balanced rotation option"];
+}
+
 function recipeMatchBullets(
   recipe: ReturnType<typeof scoreQuiz>["recipes"][number],
   result: ReturnType<typeof scoreQuiz>,
   answers: QuizAnswers
 ) {
-  const bullets = [
-    `${recipe.thermal} thermal profile supports ${result.energyType} energy balance`,
-    recipe.elements.includes(result.primaryElement)
-      ? `Strong match for ${result.primaryElement} constitution`
-      : `Supports ${result.secondaryElement} secondary tendencies`,
-    ...recipe.wellnessReasons.map((reason) =>
+  const profileReason = recipe.elements.includes(result.primaryElement)
+    ? `Strong match for ${result.primaryElement} constitution`
+    : `Supports ${result.secondaryElement} secondary tendencies`;
+  const wellnessReasons = recipe.wellnessReasons.map((reason) =>
       reason
         .replace("Skin and coat tendencies: prioritizes", "Supports skin and coat with")
         .replace("Digestive sensitivity: prioritizes", "Supports digestion with")
@@ -1232,8 +1291,16 @@ function recipeMatchBullets(
         .replace("Anxiety tendency: prioritizes", "Supports calm energy with")
         .replace("Cold sensitivity: prioritizes", "Supports cold sensitivity with")
         .replace(".", "")
-    ),
-    answers.goal ? `Aligns with the goal of ${answers.goal.toLowerCase()}` : "Works as a thoughtful rotation option"
+    );
+  const goalReason = answers.goal
+    ? `Aligns with the goal of ${answers.goal.toLowerCase()}`
+    : "Works as a thoughtful rotation option";
+  const bullets = [
+    ...recipeSpecificBenefits(recipe.name),
+    `${recipe.thermal} thermal profile supports ${result.energyType} energy balance`,
+    profileReason,
+    ...wellnessReasons,
+    goalReason
   ];
   return Array.from(new Set(bullets)).slice(0, 4);
 }
