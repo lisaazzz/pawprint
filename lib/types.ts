@@ -43,6 +43,11 @@ export type Result = {
     healthyFats: string[];
     boosters: string[];
     useModerately: string[];
+    heartFriendly: string[];
+    kidneyFriendly: string[];
+    lowHistamineFriendly: string[];
+    liverFriendly: string[];
+    notes: string[];
   };
   funFact: string;
 };

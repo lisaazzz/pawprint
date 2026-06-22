@@ -291,7 +291,15 @@ function buildCustomerRecordRows(answers: QuizAnswers, result: ReturnType<typeof
     ["Wellness tendencies", answers.wellness.join("; ")],
     ["Recommended recipes", result.recipes.map((recipe) => recipe.name).join("; ")],
     ["Ingredient proteins", result.ingredientProfile.bestProteins.join("; ")],
-    ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")]
+    ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")],
+    ["Healthy fats", result.ingredientProfile.healthyFats.join("; ")],
+    ["Optional toppers", result.ingredientProfile.boosters.join("; ")],
+    ["Use moderately", result.ingredientProfile.useModerately.join("; ")],
+    ["Heart-friendly ideas", result.ingredientProfile.heartFriendly.join("; ")],
+    ["Kidney-friendly ideas", result.ingredientProfile.kidneyFriendly.join("; ")],
+    ["Low-histamine friendly ideas", result.ingredientProfile.lowHistamineFriendly.join("; ")],
+    ["Liver-friendly ideas", result.ingredientProfile.liverFriendly.join("; ")],
+    ["Nutrition notes", result.ingredientProfile.notes.join("; ")]
   ];
 }
 
@@ -818,6 +826,44 @@ function Results({
               items={result.ingredientProfile.useModerately}
               tone="warm"
             />
+          </div>
+          <div className="rounded-xl border border-[#ead9ca] bg-white p-4">
+            <h3 className="mb-3 font-serif text-2xl font-bold">Special Support Filters</h3>
+            <p className="mb-4 text-sm leading-6 text-neutral-600">
+              Use these as conversation starters with a veterinarian, especially for dogs with known
+              heart, kidney, liver, allergy, or histamine concerns.
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <IngredientGroup
+                title="Heart-Friendly Ideas"
+                items={result.ingredientProfile.heartFriendly}
+              />
+              <IngredientGroup
+                title="Kidney-Friendly Ideas"
+                items={result.ingredientProfile.kidneyFriendly}
+              />
+              <IngredientGroup
+                title="Low-Histamine Friendly"
+                items={result.ingredientProfile.lowHistamineFriendly}
+              />
+              <IngredientGroup
+                title="Liver-Friendly Ideas"
+                items={result.ingredientProfile.liverFriendly}
+              />
+            </div>
+          </div>
+          <div className="rounded-xl bg-white/80 p-4">
+            <h3 className="mb-2 text-sm font-black uppercase tracking-[0.14em] text-paw-primary">
+              Nutrition Notes
+            </h3>
+            <div className="space-y-2">
+              {result.ingredientProfile.notes.map((note) => (
+                <div key={note} className="flex gap-2 text-sm leading-6 text-neutral-700">
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-paw-accent" />
+                  <span>{note}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
