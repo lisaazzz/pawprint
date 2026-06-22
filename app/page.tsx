@@ -12,11 +12,14 @@ import {
   FileDown,
   Heart,
   Leaf,
+  MessageCircle,
+  Moon,
   PawPrint,
   RefreshCw,
   Share2,
   Sparkles,
-  SunMedium
+  SunMedium,
+  Trophy
 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -727,65 +730,122 @@ function Results({
     void sendRecord();
   }, [answers, dogName, result]);
 
+  const profileName = `${result.primaryElement}-${result.secondaryElement} ${result.energyType}`;
+  const personalityWords = getPersonalityWords(result.primaryElement, result.secondaryElement);
+  const energyDetails = getEnergyDetails(result.energyType);
+  const practicalMeaning = getPracticalMeaning(result.primaryElement, result.energyType, answers.wellness);
+  const personalizedSummary = buildPremiumSummary(dogName, result, answers);
+  const whatsappText = encodeURIComponent(
+    `Hi Holistic PawFood, I completed the PawPrint quiz for ${dogName}. ${dogName} is ${profileName} and ${result.archetype}. I would like a personalized feeding recommendation.`
+  );
+
   return (
-    <div className="space-y-5">
-      <Card className="overflow-hidden">
-        <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="bg-paw-secondary p-6">
-            <p className="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-paw-primary">PawPrint Results</p>
-            <h2 className="font-serif text-4xl font-black">{dogName}'s Wellness Profile</h2>
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <ResultMetric label="Primary" value={result.primaryElement} />
-              <ResultMetric label="Secondary" value={result.secondaryElement} />
-              <ResultMetric label="Yin-Yang" value={result.energyType} />
-              <ResultMetric label="Confidence" value={`${result.confidence}%`} />
+    <div className="space-y-6">
+      <motion.section
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="overflow-hidden rounded-2xl border border-[#ead9ca] bg-[radial-gradient(circle_at_15%_10%,#fff7ee,transparent_34%),linear-gradient(135deg,#ffffff,#F6E7D8_52%,#e8f0e2)] shadow-soft"
+      >
+        <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
+          <div className="space-y-5">
+            <p className="text-sm font-black uppercase tracking-[0.2em] text-paw-primary">
+              {dogName}'s PawPrint Profile
+            </p>
+            <div>
+              <h2 className="font-serif text-5xl font-black leading-none sm:text-6xl">
+                {result.archetype}
+              </h2>
+              <p className="mt-4 text-2xl font-bold text-neutral-700">{profileName}</p>
             </div>
-          </div>
-          <div className="p-6">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-paw-primary text-white">
-                <BadgeCheck className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-neutral-500">Archetype</p>
-                <h3 className="font-serif text-3xl font-bold">{result.archetype}</h3>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {sortedElements.map(([element, percent]) => (
-                <div key={element}>
-                  <div className="mb-1 flex justify-between text-sm font-semibold">
-                    <span>{element}</span>
-                    <span>{percent}%</span>
-                  </div>
-                  <div className="h-3 overflow-hidden rounded-full bg-paw-secondary">
-                    <div className="h-full rounded-full bg-paw-primary" style={{ width: `${percent}%` }} />
-                  </div>
-                </div>
+            <div className="flex flex-wrap gap-2">
+              {personalityWords.map((word) => (
+                <span
+                  key={word}
+                  className="rounded-full bg-white/80 px-4 py-2 text-sm font-bold text-neutral-700 shadow-sm"
+                >
+                  {word}
+                </span>
               ))}
+            </div>
+            <p className="max-w-2xl text-lg leading-8 text-neutral-700">{personalizedSummary}</p>
+          </div>
+          <div className="flex items-center justify-center">
+            <div className="relative flex h-64 w-64 items-center justify-center rounded-full bg-white/75 shadow-soft">
+              <div className="absolute inset-5 rounded-full border border-paw-secondary" />
+              <PawPrint className="h-24 w-24 text-paw-primary" />
+              <div className="absolute -bottom-3 rounded-full bg-paw-primary px-5 py-3 text-sm font-black text-white shadow-soft">
+                {result.confidence}% profile confidence
+              </div>
             </div>
           </div>
         </div>
+      </motion.section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Personalized Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-lg leading-8 text-neutral-700">{personalizedSummary}</p>
+        </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>What This Means</CardTitle>
+          <CardTitle>Element Breakdown</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-lg leading-8 text-neutral-700">{result.explanation}</p>
+        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {sortedElements.map(([element, percent]) => (
+            <ElementCard key={element} element={element as ElementType} percent={percent} />
+          ))}
         </CardContent>
       </Card>
+
+      <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
+        <Card className="bg-white/85">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              {result.energyType === "Yin" ? (
+                <Moon className="h-5 w-5 text-paw-primary" />
+              ) : (
+                <SunMedium className="h-5 w-5 text-paw-primary" />
+              )}
+              {energyDetails.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="leading-7 text-neutral-700">{energyDetails.description}</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {energyDetails.points.map((point) => (
+                <IconNote key={point} text={point} />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>What This Means Day To Day</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {practicalMeaning.map((item) => (
+                <IconNote key={item} text={item} />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Leaf className="h-5 w-5 text-paw-accent" />
-              Ideal Food Profile
+              What Foods Tend To Suit {dogName}?
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-5 sm:grid-cols-2">
+          <CardContent className="grid gap-4 sm:grid-cols-2">
             <FoodList title="Recommended" items={result.foodProfile.recommended} icon="check" />
             <FoodList title="Enjoy In Moderation" items={result.foodProfile.moderation} icon="warn" />
           </CardContent>
@@ -876,33 +936,46 @@ function Results({
             Recommended Holistic PawFood Recipes
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-3">
+        <CardContent className="grid gap-5 md:grid-cols-3">
           {result.recipes.map((recipe, index) => (
-            <div key={recipe.name} className="rounded-xl border border-[#ead9ca] bg-white p-4">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <span className="rounded-full bg-paw-secondary px-3 py-1 text-xs font-bold text-paw-primary">
-                  {recipe.badge}
-                </span>
-                <span className="text-2xl font-black text-paw-primary">#{index + 1}</span>
-              </div>
-              <h3 className="mb-2 font-serif text-2xl font-bold">{recipe.name}</h3>
-              <p className="mb-4 text-sm leading-6 text-neutral-600">{recipe.reason}</p>
-              {recipe.wellnessReasons.length > 0 && (
-                <div className="mb-4 space-y-2 rounded-xl bg-paw-secondary/55 p-3">
-                  <p className="text-xs font-black uppercase tracking-[0.14em] text-paw-primary">
-                    Wellness Match
-                  </p>
-                  {recipe.wellnessReasons.map((reason) => (
-                    <div key={reason} className="flex gap-2 text-xs font-semibold leading-5 text-neutral-700">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-paw-accent" />
-                      <span>{reason}</span>
-                    </div>
-                  ))}
-                </div>
+            <div
+              key={recipe.name}
+              className={cn(
+                "relative overflow-hidden rounded-2xl border bg-white p-5 shadow-soft",
+                index === 0 ? "border-paw-primary" : "border-[#ead9ca]"
               )}
-              <div className="space-y-2 text-sm font-semibold">
-                <p>Thermal Nature: {recipe.thermal}</p>
-                <p>Element Match: {recipe.elements.join(", ")}</p>
+            >
+              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-paw-secondary" />
+              <div className="relative mb-5 flex items-center justify-between gap-3">
+                <span className="rounded-full bg-paw-primary px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-white">
+                  {recipeBadge(index)}
+                </span>
+                <Trophy className={cn("h-7 w-7", index === 0 ? "text-paw-primary" : "text-paw-accent")} />
+              </div>
+              <h3 className="relative mb-3 font-serif text-3xl font-black">{recipe.name}</h3>
+              <p className="mb-4 text-sm font-bold text-paw-primary">Why this matches {dogName}</p>
+              <div className="mb-5 space-y-3">
+                {recipeMatchBullets(recipe, result, answers).map((reason) => (
+                  <IconNote key={reason} text={reason} compact />
+                ))}
+              </div>
+              <div className="mb-4 rounded-xl bg-paw-secondary/55 p-3">
+                <p className="mb-1 text-xs font-black uppercase tracking-[0.14em] text-paw-primary">
+                  Key Ingredients
+                </p>
+                <p className="text-sm font-semibold leading-6 text-neutral-700">
+                  {recipeIngredients(recipe.name).join(" • ")}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm font-semibold">
+                <div className="rounded-xl border border-[#ead9ca] bg-white/80 p-3">
+                  <p className="text-xs uppercase tracking-[0.12em] text-neutral-500">Thermal</p>
+                  <p>{recipe.thermal}</p>
+                </div>
+                <div className="rounded-xl border border-[#ead9ca] bg-white/80 p-3">
+                  <p className="text-xs uppercase tracking-[0.12em] text-neutral-500">Elements</p>
+                  <p>{recipe.elements.join(", ")}</p>
+                </div>
               </div>
             </div>
           ))}
@@ -911,19 +984,20 @@ function Results({
 
       <Card>
         <CardHeader>
-          <CardTitle>Share Results</CardTitle>
+          <CardTitle>Shareable Result</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div
             ref={shareRef}
-            className="rounded-2xl border border-[#ead9ca] bg-paw-background p-6 text-center"
+            className="rounded-2xl border border-[#ead9ca] bg-[linear-gradient(135deg,#ffffff,#F6E7D8)] p-8 text-center shadow-soft"
           >
             <p className="mb-3 text-4xl">🔥🌎☀️</p>
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-paw-primary">PawPrint™</p>
+            <p className="mt-4 text-lg font-semibold text-neutral-600">{dogName} is</p>
             <h3 className="mx-auto mt-2 max-w-lg font-serif text-3xl font-black">
-              {dogName} is a {result.primaryElement}-{result.secondaryElement} {result.energyType} Dog
+              {result.archetype}
             </h3>
-            <p className="mt-3 font-semibold text-neutral-600">{result.archetype}</p>
+            <p className="mt-3 text-xl font-bold text-neutral-700">{profileName}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button onClick={onShare}>
@@ -935,6 +1009,27 @@ function Results({
               Download Image Button
             </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="overflow-hidden bg-paw-primary text-white">
+        <CardContent className="grid gap-5 p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p className="mb-2 text-sm font-black uppercase tracking-[0.18em] text-white/75">
+              Personalized Feeding Support
+            </p>
+            <h3 className="font-serif text-3xl font-black">Want a Personalized Feeding Plan?</h3>
+            <p className="mt-2 max-w-2xl leading-7 text-white/85">
+              Get a custom recommendation from Holistic PawFood based on {dogName}'s profile,
+              wellness tendencies, and food goals.
+            </p>
+          </div>
+          <Button asChild variant="secondary" size="lg">
+            <a href={`https://wa.me/?text=${whatsappText}`} target="_blank" rel="noreferrer">
+              <MessageCircle className="h-5 w-5" />
+              Chat on WhatsApp
+            </a>
+          </Button>
         </CardContent>
       </Card>
 
@@ -984,6 +1079,160 @@ function ResultMetric({ label, value }: { label: string; value: string }) {
       <p className="mt-1 font-serif text-2xl font-black">{value}</p>
     </div>
   );
+}
+
+const elementVisuals: Record<ElementType, { color: string; bg: string; icon: string }> = {
+  Fire: { color: "#C86A4A", bg: "#FBE7DF", icon: "Fire" },
+  Earth: { color: "#A77C3B", bg: "#F6E7D8", icon: "Earth" },
+  Metal: { color: "#7D8790", bg: "#EEF0F1", icon: "Metal" },
+  Water: { color: "#5B89A6", bg: "#E6F1F6", icon: "Water" },
+  Wood: { color: "#6E985B", bg: "#E7F0E2", icon: "Wood" }
+};
+
+function ElementCard({ element, percent }: { element: ElementType; percent: number }) {
+  const visual = elementVisuals[element];
+  return (
+    <div className="rounded-2xl border border-[#ead9ca] bg-white p-4 shadow-sm">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <span
+          className="flex h-11 w-11 items-center justify-center rounded-xl text-xs font-black"
+          style={{ backgroundColor: visual.bg, color: visual.color }}
+        >
+          {visual.icon}
+        </span>
+        <span className="font-serif text-3xl font-black" style={{ color: visual.color }}>
+          {percent}%
+        </span>
+      </div>
+      <p className="mb-3 text-lg font-black">{element}</p>
+      <div className="h-3 overflow-hidden rounded-full bg-paw-secondary">
+        <div className="h-full rounded-full" style={{ width: `${percent}%`, backgroundColor: visual.color }} />
+      </div>
+    </div>
+  );
+}
+
+function IconNote({ text, compact = false }: { text: string; compact?: boolean }) {
+  return (
+    <div className={cn("flex gap-2 rounded-xl bg-white/75", compact ? "p-0" : "p-3")}>
+      <Check className="mt-1 h-4 w-4 shrink-0 text-paw-accent" />
+      <span className={cn("leading-6 text-neutral-700", compact ? "text-sm font-semibold" : "text-sm")}>
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function getPersonalityWords(primary: ElementType, secondary: ElementType) {
+  const words: Record<ElementType, string[]> = {
+    Fire: ["Social", "Expressive", "Enthusiastic"],
+    Earth: ["Gentle", "Food-loving", "Steady"],
+    Metal: ["Loyal", "Sensitive", "Predictable"],
+    Water: ["Thoughtful", "Observant", "Wise"],
+    Wood: ["Athletic", "Determined", "Protective"]
+  };
+  return Array.from(new Set([...words[primary], ...words[secondary]])).slice(0, 4);
+}
+
+function getEnergyDetails(energyType: string) {
+  if (energyType === "Yin") {
+    return {
+      title: "Yin Energy",
+      description: "Your dog shows a stronger Yin tendency, so comfort, warmth, and steady nourishment may feel especially supportive.",
+      points: ["Prefers warmth", "Enjoys comfort", "Calmer energy", "May be more sensitive to cold weather"]
+    };
+  }
+  if (energyType === "Yang") {
+    return {
+      title: "Yang Energy",
+      description: "Your dog shows a stronger Yang tendency, so cooling balance, hydration, and activity-aware meals may suit them well.",
+      points: ["Naturally active", "May run warm", "Seeks cool resting spots", "Benefits from cooling balance"]
+    };
+  }
+  return {
+    title: "Balanced Energy",
+    description: "Your dog shows a balanced Yin-Yang pattern, so neutral recipes and steady rotation are a good fit.",
+    points: ["Flexible routine", "Balanced activity", "Neutral food profile", "Easy to rotate gently"]
+  };
+}
+
+function getPracticalMeaning(primary: ElementType, energyType: string, wellness: string[]) {
+  const base: Record<ElementType, string[]> = {
+    Fire: ["Social interaction", "Cooling rest spaces", "Play with recovery time"],
+    Earth: ["Consistent routines", "Predictable meal times", "Gentle transitions"],
+    Metal: ["Quiet environments", "Trusted relationships", "Simple routines"],
+    Water: ["Warm sleeping spots", "Patient encouragement", "Low-pressure exploration"],
+    Wood: ["Purposeful activity", "Clear boundaries", "Mental challenges"]
+  };
+  const energy = energyType === "Yin" ? "Gentle exercise" : energyType === "Yang" ? "Cooling downtime" : "Balanced daily rhythm";
+  const wellnessNote = wellness.includes("Arthritis")
+    ? "Mobility-aware movement"
+    : wellness.includes("Digestive sensitivity")
+      ? "Slow food transitions"
+      : wellness.includes("Anxiety")
+        ? "Calm, predictable environments"
+        : "Close family connection";
+  return Array.from(new Set([...base[primary], energy, wellnessNote])).slice(0, 6);
+}
+
+function buildPremiumSummary(
+  dogName: string,
+  result: ReturnType<typeof scoreQuiz>,
+  answers: QuizAnswers
+) {
+  const wellness = answers.wellness.filter((item) => item !== "None");
+  const wellnessText =
+    wellness.length > 0
+      ? `Because ${dogName} also showed ${wellness.slice(0, 3).join(", ").toLowerCase()} tendencies`
+      : `Because ${dogName}'s wellness answers were fairly balanced`;
+  const goalText = answers.goal ? `and the selected goal was ${answers.goal.toLowerCase()}` : "and the goal is general wellness";
+  return `${dogName}'s profile suggests a ${result.primaryElement}-${result.secondaryElement} ${result.energyType} constitution. Dogs with this profile often combine ${getPersonalityWords(result.primaryElement, result.secondaryElement).join(", ").toLowerCase()} traits with a distinctive food-energy pattern. ${wellnessText}, ${goalText}, we prioritized recipes and ingredients that fit both personality and day-to-day wellness needs.`;
+}
+
+function recipeBadge(index: number) {
+  return index === 0 ? "Best Match" : index === 1 ? "Excellent Match" : "Good Match";
+}
+
+function recipeIngredients(name: string) {
+  const ingredients: Record<string, string[]> = {
+    "GC Beef Greens": ["Beef", "Leafy greens", "Zucchini", "Parsley", "Omega-rich oil"],
+    "GC Chicken Harmony": ["Chicken", "Pumpkin", "Carrot", "Green beans", "Bone broth"],
+    "GC Porky Beefy": ["Pork", "Beef", "Sweet potato", "Carrot", "Omega-rich oil"],
+    "GC Rabbit Sockeye": ["Rabbit", "Sockeye salmon", "Zucchini", "Spinach", "Blueberries"],
+    "GC Pork Complete": ["Pork", "Leafy greens", "Pumpkin", "Carrot", "Hemp seed oil"],
+    "GC Turkey Recipe": ["Turkey", "Pumpkin", "Green beans", "Carrot", "Blueberries"],
+    "Chicken Recipe": ["Chicken", "Pumpkin", "Carrot", "Green beans", "Egg"],
+    "Pork Red": ["Pork", "Red vegetables", "Zucchini", "Leafy greens", "Omega-rich oil"],
+    "Beef Dandelion Zucchini": ["Beef", "Dandelion greens", "Zucchini", "Carrot", "Parsley"],
+    "Duck Recipe": ["Duck", "Zucchini", "Leafy greens", "Blueberries", "Omega-rich oil"],
+    "Lamb Recipe": ["Lamb", "Carrot", "Sweet potato", "Kale", "Omega-rich oil"]
+  };
+  return ingredients[name] || ["Whole protein", "Vegetables", "Moisture", "Balanced fats"];
+}
+
+function recipeMatchBullets(
+  recipe: ReturnType<typeof scoreQuiz>["recipes"][number],
+  result: ReturnType<typeof scoreQuiz>,
+  answers: QuizAnswers
+) {
+  const bullets = [
+    `${recipe.thermal} thermal profile supports ${result.energyType} energy balance`,
+    recipe.elements.includes(result.primaryElement)
+      ? `Strong match for ${result.primaryElement} constitution`
+      : `Supports ${result.secondaryElement} secondary tendencies`,
+    ...recipe.wellnessReasons.map((reason) =>
+      reason
+        .replace("Skin and coat tendencies: prioritizes", "Supports skin and coat with")
+        .replace("Digestive sensitivity: prioritizes", "Supports digestion with")
+        .replace("Arthritis or mobility support: prioritizes", "Supports mobility with")
+        .replace("Weight tendency: prioritizes", "Supports weight goals with")
+        .replace("Anxiety tendency: prioritizes", "Supports calm energy with")
+        .replace("Cold sensitivity: prioritizes", "Supports cold sensitivity with")
+        .replace(".", "")
+    ),
+    answers.goal ? `Aligns with the goal of ${answers.goal.toLowerCase()}` : "Works as a thoughtful rotation option"
+  ];
+  return Array.from(new Set(bullets)).slice(0, 4);
 }
 
 function FoodList({
