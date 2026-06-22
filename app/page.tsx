@@ -9,6 +9,7 @@ import {
   Check,
   ChevronRight,
   Download,
+  FileDown,
   Heart,
   Leaf,
   PawPrint,
@@ -135,6 +136,25 @@ export default function Home() {
     link.click();
   }
 
+  function downloadCustomerRecord() {
+    const rows = buildCustomerRecordRows(answers, result);
+    const csv = rows
+      .map((row) => row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const link = document.createElement("a");
+    link.download = `${dogName.toLowerCase().replace(/\s+/g, "-") || "pawprint"}-record.csv`;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  async function copyCustomerRecord() {
+    const rows = buildCustomerRecordRows(answers, result);
+    const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n");
+    await navigator.clipboard.writeText(text);
+  }
+
   return (
     <main className="min-h-screen overflow-hidden bg-paw-background text-paw-text">
       <div className="fixed inset-0 -z-10 warm-grid opacity-70" />
@@ -211,6 +231,8 @@ export default function Home() {
                   shareRef={shareRef}
                   onShare={shareResults}
                   onDownload={downloadShareCard}
+                  onDownloadRecord={downloadCustomerRecord}
+                  onCopyRecord={copyCustomerRecord}
                 />
               )}
             </motion.div>
@@ -249,6 +271,27 @@ function normalizeAnswers(saved?: Partial<QuizAnswers>): QuizAnswers {
     wellness: Array.isArray(saved?.wellness) ? saved.wellness : [],
     goal: typeof saved?.goal === "string" ? saved.goal : ""
   };
+}
+
+function buildCustomerRecordRows(answers: QuizAnswers, result: ReturnType<typeof scoreQuiz>) {
+  return [
+    ["Dog name", answers.profile.name || ""],
+    ["Breed", answers.profile.breed || ""],
+    ["Age", answers.profile.age || ""],
+    ["Weight kg", answers.profile.weight || ""],
+    ["Sex", answers.profile.sex || ""],
+    ["Owner goal", answers.goal || ""],
+    ["Primary element", result.primaryElement],
+    ["Secondary element", result.secondaryElement],
+    ["Yin-Yang type", result.energyType],
+    ["Archetype", result.archetype],
+    ["Confidence", `${result.confidence}%`],
+    ["Traits", answers.traits.join("; ")],
+    ["Wellness tendencies", answers.wellness.join("; ")],
+    ["Recommended recipes", result.recipes.map((recipe) => recipe.name).join("; ")],
+    ["Ingredient proteins", result.ingredientProfile.bestProteins.join("; ")],
+    ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")]
+  ];
 }
 
 function Landing({ onStart }: { onStart: () => void }) {
@@ -385,8 +428,7 @@ function ProfileStep({
     ["name", "Dog Name", "Cocoy"],
     ["breed", "Breed", "Golden Retriever"],
     ["age", "Age", "5"],
-    ["weight", "Weight", "42 lb"],
-    ["sex", "Sex", "Female"]
+    ["weight", "Weight in kg", "18"]
   ];
 
   return (
@@ -403,6 +445,26 @@ function ProfileStep({
             />
           </div>
         ))}
+        <div className="space-y-2">
+          <Label>Sex</Label>
+          <div className="grid grid-cols-2 gap-2">
+            {["Female", "Male"].map((sex) => (
+              <button
+                key={sex}
+                type="button"
+                onClick={() => updateProfile("sex", sex)}
+                className={cn(
+                  "h-12 rounded-xl border px-4 text-sm font-semibold transition",
+                  answers.profile.sex === sex
+                    ? "border-paw-primary bg-paw-secondary"
+                    : "border-[#dec8b8] bg-white hover:border-paw-primary"
+                )}
+              >
+                {sex}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="photo">Upload photo, optional</Label>
           <Input
@@ -585,13 +647,17 @@ function Results({
   result,
   shareRef,
   onShare,
-  onDownload
+  onDownload,
+  onDownloadRecord,
+  onCopyRecord
 }: {
   answers: QuizAnswers;
   result: ReturnType<typeof scoreQuiz>;
   shareRef: React.RefObject<HTMLDivElement | null>;
   onShare: () => void;
   onDownload: () => void;
+  onDownloadRecord: () => void;
+  onCopyRecord: () => void;
 }) {
   const dogName = answers.profile.name || "Your dog";
   const sortedElements = Object.entries(result.elementPercents).sort((a, b) => b[1] - a[1]);
@@ -751,6 +817,31 @@ function Results({
             <Button variant="secondary" onClick={onDownload}>
               <Download className="h-4 w-4" />
               Download Image Button
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileDown className="h-5 w-5 text-paw-primary" />
+            Customer Record
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm leading-6 text-neutral-600">
+            Save a copy of this completed assessment for your own records. Automatic owner
+            notifications need a form, email, or database connection.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button variant="secondary" onClick={onDownloadRecord}>
+              <Download className="h-4 w-4" />
+              Download Record CSV
+            </Button>
+            <Button variant="outline" onClick={onCopyRecord}>
+              <FileDown className="h-4 w-4" />
+              Copy Record
             </Button>
           </div>
         </CardContent>
