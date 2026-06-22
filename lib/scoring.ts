@@ -20,6 +20,86 @@ const wellnessModifiers: Record<string, Partial<Record<ElementType, number>>> = 
   "Cold intolerance": { Water: 2 }
 };
 
+const wellnessRecipeRules: Array<{
+  matches: string[];
+  label: string;
+  recipeBoosts: Record<string, number>;
+  thermalBoost?: "cooling" | "warming" | "neutral";
+  elementBoost?: ElementType;
+}> = [
+  {
+    matches: ["Itchy skin", "Hot spots", "Ear infections", "Excessive thirst"],
+    label: "Skin and coat tendencies: prioritizes cooling, moisture-rich, omega-supportive recipes.",
+    recipeBoosts: {
+      "GC Rabbit Sockeye": 7,
+      "Duck Recipe": 6,
+      "GC Pork Complete": 4,
+      "Pork Red": 3
+    },
+    thermalBoost: "cooling",
+    elementBoost: "Fire"
+  },
+  {
+    matches: ["Digestive sensitivity"],
+    label: "Digestive sensitivity: prioritizes simple Earth or neutral recipes that are easier to rotate gently.",
+    recipeBoosts: {
+      "GC Chicken Harmony": 7,
+      "GC Turkey Recipe": 6,
+      "Chicken Recipe": 5,
+      "GC Beef Greens": 4
+    },
+    thermalBoost: "neutral",
+    elementBoost: "Earth"
+  },
+  {
+    matches: ["Arthritis"],
+    label: "Arthritis or mobility support: prioritizes Water-supportive and gently warming recipes.",
+    recipeBoosts: {
+      "Lamb Recipe": 7,
+      "GC Porky Beefy": 6,
+      "GC Chicken Harmony": 4
+    },
+    thermalBoost: "warming",
+    elementBoost: "Water"
+  },
+  {
+    matches: ["Weight gain"],
+    label: "Weight tendency: prioritizes leaner, cooling-to-neutral recipes and avoids overly rich matches.",
+    recipeBoosts: {
+      "GC Turkey Recipe": 7,
+      "GC Rabbit Sockeye": 5,
+      "Duck Recipe": 4,
+      "Chicken Recipe": 4
+    },
+    thermalBoost: "neutral",
+    elementBoost: "Earth"
+  },
+  {
+    matches: ["Anxiety"],
+    label: "Anxiety tendency: prioritizes steady, neutral recipes with a calm rotation profile.",
+    recipeBoosts: {
+      "GC Turkey Recipe": 6,
+      "GC Chicken Harmony": 6,
+      "GC Beef Greens": 4,
+      "Chicken Recipe": 4
+    },
+    thermalBoost: "neutral",
+    elementBoost: "Earth"
+  },
+  {
+    matches: ["Cold intolerance"],
+    label: "Cold sensitivity: prioritizes warming, nourishing recipes while keeping transitions gentle.",
+    recipeBoosts: {
+      "Lamb Recipe": 7,
+      "GC Porky Beefy": 6,
+      "GC Chicken Harmony": 4,
+      "Chicken Recipe": 3
+    },
+    thermalBoost: "warming",
+    elementBoost: "Water"
+  }
+];
+
 const archetypes: Array<{
   element: ElementType;
   energy?: EnergyType;
@@ -271,7 +351,13 @@ export function scoreQuiz(answers: QuizAnswers): Result {
     archetype,
     confidence,
     elementPercents,
-    recipes: recommendRecipes(primaryElement, secondaryElement, energyType, answers.goal),
+    recipes: recommendRecipes(
+      primaryElement,
+      secondaryElement,
+      energyType,
+      answers.goal,
+      answers.wellness
+    ),
     explanation: buildExplanation(answers.profile.name, primaryElement, secondaryElement, energyType),
     foodProfile: buildFoodProfile(primaryElement, energyType),
     ingredientProfile: buildIngredientProfile(primaryElement, secondaryElement, energyType, answers.goal),
@@ -298,7 +384,8 @@ function recommendRecipes(
   primaryElement: ElementType,
   secondaryElement: ElementType,
   energyType: EnergyType,
-  goal: string
+  goal: string,
+  wellness: string[]
 ) {
   const preferred = new Set<string>(baseRecommendations[primaryElement]);
   for (const name of baseRecommendations[secondaryElement].slice(0, 2)) preferred.add(name);
@@ -314,7 +401,15 @@ function recommendRecipes(
 
   const scored = recipes.map((recipe) => ({
     recipe,
-    score: scoreRecipe(recipe, preferred, primaryElement, secondaryElement, energyType, goal)
+    score: scoreRecipe(
+      recipe,
+      preferred,
+      primaryElement,
+      secondaryElement,
+      energyType,
+      goal,
+      wellness
+    )
   }));
 
   return scored
@@ -323,7 +418,8 @@ function recommendRecipes(
     .map(({ recipe }, index) => ({
       ...recipe,
       badge: index === 0 ? "Best Match" : index === 1 ? "Great Fit" : "Smart Rotation",
-      reason: recipeReason(recipe, primaryElement, energyType, goal)
+      wellnessReasons: recipeWellnessReasons(recipe, wellness),
+      reason: recipeReason(recipe, primaryElement, energyType, goal, wellness)
     }));
 }
 
@@ -333,7 +429,8 @@ function scoreRecipe(
   primaryElement: ElementType,
   secondaryElement: ElementType,
   energyType: EnergyType,
-  goal: string
+  goal: string,
+  wellness: string[]
 ) {
   let score = 0;
   if (preferred.has(recipe.name)) score += 6;
@@ -347,6 +444,20 @@ function scoreRecipe(
   }
   if (goal === "Better digestion" && recipe.elements.includes("Earth")) score += 2;
   if (goal === "Weight management" && recipe.thermal.toLowerCase().includes("cool")) score += 1;
+  for (const rule of activeWellnessRules(wellness)) {
+    score += rule.recipeBoosts[recipe.name] || 0;
+    if (rule.elementBoost && recipe.elements.includes(rule.elementBoost)) score += 2;
+    if (rule.thermalBoost === "cooling" && recipe.thermal.toLowerCase().includes("cool")) score += 3;
+    if (rule.thermalBoost === "warming" && recipe.thermal.toLowerCase().includes("warm")) score += 3;
+    if (rule.thermalBoost === "neutral" && recipe.thermal.toLowerCase().includes("neutral")) score += 3;
+  }
+  if (wellness.includes("Weight gain") && recipe.thermal.toLowerCase().includes("warm")) score -= 2;
+  if (
+    wellness.some((item) => ["Itchy skin", "Hot spots", "Excessive thirst"].includes(item)) &&
+    recipe.thermal.toLowerCase().includes("warm")
+  ) {
+    score -= 2;
+  }
   return score;
 }
 
@@ -354,7 +465,8 @@ function recipeReason(
   recipe: Recipe,
   primaryElement: ElementType,
   energyType: EnergyType,
-  goal: string
+  goal: string,
+  wellness: string[]
 ) {
   const energyPhrase =
     energyType === "Yang"
@@ -363,7 +475,28 @@ function recipeReason(
         ? "brings gentle warmth and steadiness"
         : "keeps meals centered and easy to rotate";
   const goalPhrase = goal === "Just curious" ? "your dog's profile" : goal.toLowerCase();
-  return `${recipe.thermal} and aligned with ${recipe.elements.join(", ")} patterns, so it ${energyPhrase} while supporting ${goalPhrase}.`;
+  const wellnessPhrase = recipeWellnessReasons(recipe, wellness)[0];
+  return `${recipe.thermal} and aligned with ${recipe.elements.join(", ")} patterns, so it ${energyPhrase} while supporting ${goalPhrase}.${wellnessPhrase ? ` ${wellnessPhrase}` : ""}`;
+}
+
+function activeWellnessRules(wellness: string[]) {
+  return wellnessRecipeRules.filter((rule) => rule.matches.some((item) => wellness.includes(item)));
+}
+
+function recipeWellnessReasons(recipe: Recipe, wellness: string[]) {
+  return activeWellnessRules(wellness)
+    .filter((rule) => {
+      const boosted = Boolean(rule.recipeBoosts[recipe.name]);
+      const elementMatched = rule.elementBoost ? recipe.elements.includes(rule.elementBoost) : false;
+      const thermal = recipe.thermal.toLowerCase();
+      const thermalMatched =
+        (rule.thermalBoost === "cooling" && thermal.includes("cool")) ||
+        (rule.thermalBoost === "warming" && thermal.includes("warm")) ||
+        (rule.thermalBoost === "neutral" && thermal.includes("neutral"));
+      return boosted || elementMatched || thermalMatched;
+    })
+    .map((rule) => rule.label)
+    .slice(0, 2);
 }
 
 function buildExplanation(

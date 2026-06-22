@@ -31,7 +31,7 @@ export type Result = {
   archetype: string;
   confidence: number;
   elementPercents: Record<ElementType, number>;
-  recipes: Array<Recipe & { reason: string; badge: string }>;
+  recipes: Array<Recipe & { reason: string; badge: string; wellnessReasons: string[] }>;
   explanation: string;
   foodProfile: {
     recommended: string[];

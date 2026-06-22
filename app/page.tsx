@@ -290,6 +290,7 @@ function buildCustomerRecordRows(answers: QuizAnswers, result: ReturnType<typeof
     ["Traits", answers.traits.join("; ")],
     ["Wellness tendencies", answers.wellness.join("; ")],
     ["Recommended recipes", result.recipes.map((recipe) => recipe.name).join("; ")],
+    ["Recipe wellness reasons", result.recipes.flatMap((recipe) => recipe.wellnessReasons).join("; ")],
     ["Ingredient proteins", result.ingredientProfile.bestProteins.join("; ")],
     ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")],
     ["Healthy fats", result.ingredientProfile.healthyFats.join("; ")],
@@ -886,6 +887,19 @@ function Results({
               </div>
               <h3 className="mb-2 font-serif text-2xl font-bold">{recipe.name}</h3>
               <p className="mb-4 text-sm leading-6 text-neutral-600">{recipe.reason}</p>
+              {recipe.wellnessReasons.length > 0 && (
+                <div className="mb-4 space-y-2 rounded-xl bg-paw-secondary/55 p-3">
+                  <p className="text-xs font-black uppercase tracking-[0.14em] text-paw-primary">
+                    Wellness Match
+                  </p>
+                  {recipe.wellnessReasons.map((reason) => (
+                    <div key={reason} className="flex gap-2 text-xs font-semibold leading-5 text-neutral-700">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-paw-accent" />
+                      <span>{reason}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="space-y-2 text-sm font-semibold">
                 <p>Thermal Nature: {recipe.thermal}</p>
                 <p>Element Match: {recipe.elements.join(", ")}</p>
