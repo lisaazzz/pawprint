@@ -187,44 +187,44 @@ const ingredientProfiles: Record<
   }
 > = {
   Fire: {
-    bestProteins: ["Rabbit", "Duck", "Pork", "Turkey", "White fish", "Sockeye salmon", "Egg whites"],
-    bestVegetables: ["Zucchini", "Spinach", "Celery", "Cucumber", "Broccoli", "Green beans", "Bok choy"],
-    smartCarbs: ["Barley", "Quinoa", "Pumpkin", "Butternut squash"],
-    healthyFats: ["Salmon oil", "Sardines", "Ground flaxseed", "Hemp seed oil"],
-    boosters: ["Blueberries", "Dandelion greens", "Parsley", "Turmeric", "Cranberry"],
-    useModerately: ["Lamb", "Venison", "Heavy warming spices", "Too many rich treats", "High-sodium broths"]
+    bestProteins: ["Rabbit", "Duck", "Pork", "Turkey", "White fish", "Sockeye salmon", "Egg whites", "Cod", "Haddock", "Quail"],
+    bestVegetables: ["Zucchini", "Spinach", "Celery", "Cucumber", "Broccoli", "Green beans", "Bok choy", "Romaine", "Watercress", "Asparagus"],
+    smartCarbs: ["Barley", "Quinoa", "Pumpkin", "Butternut squash", "Pearled barley", "Amaranth"],
+    healthyFats: ["Salmon oil", "Sardines", "Ground flaxseed", "Hemp seed oil", "Anchovy oil", "Chia seeds"],
+    boosters: ["Blueberries", "Dandelion greens", "Parsley", "Turmeric", "Cranberry", "Seaweed in small amounts", "Goji berries in small amounts"],
+    useModerately: ["Lamb", "Venison", "Heavy warming spices", "Too many rich treats", "High-sodium broths", "Fatty beef cuts"]
   },
   Earth: {
-    bestProteins: ["Turkey", "Chicken", "Beef", "Pork", "Eggs", "White fish", "Egg whites"],
-    bestVegetables: ["Pumpkin", "Carrot", "Sweet potato", "Green beans", "Squash", "Zucchini", "Peas"],
-    smartCarbs: ["Oats", "Brown rice", "Millet", "Sweet potato", "Pumpkin"],
-    healthyFats: ["Salmon oil", "Egg yolk", "Hemp seed oil", "Ground flaxseed"],
-    boosters: ["Parsley", "Probiotic-rich toppers", "Bone broth", "Blueberries", "Chia seeds"],
-    useModerately: ["Very fatty cuts", "Too many ingredient changes", "Large starch portions", "Salty treats"]
+    bestProteins: ["Turkey", "Chicken", "Beef", "Pork", "Eggs", "White fish", "Egg whites", "Lean lamb", "Quail", "Chicken heart"],
+    bestVegetables: ["Pumpkin", "Carrot", "Sweet potato", "Green beans", "Squash", "Zucchini", "Peas", "Parsnip", "Beet greens", "Romaine"],
+    smartCarbs: ["Oats", "Brown rice", "Millet", "Sweet potato", "Pumpkin", "Buckwheat", "Quinoa"],
+    healthyFats: ["Salmon oil", "Egg yolk", "Hemp seed oil", "Ground flaxseed", "Chia seeds", "Sardines"],
+    boosters: ["Parsley", "Probiotic-rich toppers", "Bone broth", "Blueberries", "Chia seeds", "Pumpkin seed powder", "Slippery elm discussed with your vet"],
+    useModerately: ["Very fatty cuts", "Too many ingredient changes", "Large starch portions", "Salty treats", "Heavy dairy-style treats"]
   },
   Metal: {
-    bestProteins: ["Duck", "Pork", "Beef", "Turkey", "White fish", "Rabbit", "Egg whites"],
-    bestVegetables: ["Daikon", "Cauliflower", "Zucchini", "Mushrooms", "Leafy greens", "Green beans", "Cabbage"],
-    smartCarbs: ["Barley", "Oats", "Pumpkin", "Quinoa"],
-    healthyFats: ["Salmon oil", "Sardines", "Hemp seed oil", "Ground flaxseed"],
-    boosters: ["Pear in small amounts", "Parsley", "Bone broth", "Blueberries", "Cranberry"],
-    useModerately: ["Dry crunchy foods", "Very rich meals", "Excess dairy-style treats", "High-sodium toppers"]
+    bestProteins: ["Duck", "Pork", "Beef", "Turkey", "White fish", "Rabbit", "Egg whites", "Cod", "Quail", "Lean venison"],
+    bestVegetables: ["Daikon", "Cauliflower", "Zucchini", "Mushrooms", "Leafy greens", "Green beans", "Cabbage", "Turnip greens", "Romaine", "Watercress"],
+    smartCarbs: ["Barley", "Oats", "Pumpkin", "Quinoa", "Brown rice", "Millet"],
+    healthyFats: ["Salmon oil", "Sardines", "Hemp seed oil", "Ground flaxseed", "Anchovy oil", "Chia seeds"],
+    boosters: ["Pear in small amounts", "Parsley", "Bone broth", "Blueberries", "Cranberry", "Kelp in small amounts", "Reishi mushroom discussed with your vet"],
+    useModerately: ["Dry crunchy foods", "Very rich meals", "Excess dairy-style treats", "High-sodium toppers", "Smoked meats"]
   },
   Water: {
-    bestProteins: ["Lamb", "Beef", "Pork", "Chicken", "Turkey", "Duck", "Egg whites"],
-    bestVegetables: ["Kale", "Sweet potato", "Carrot", "Pumpkin", "Green beans", "Squash", "Parsley"],
-    smartCarbs: ["Sweet potato", "Oats", "Brown rice", "Millet", "Pumpkin"],
-    healthyFats: ["Egg yolk", "Salmon oil", "Hemp seed oil", "Ground flaxseed"],
-    boosters: ["Bone broth", "Green-lipped mussel", "Turmeric", "Blueberries", "Cranberry"],
-    useModerately: ["Very cooling proteins", "Cold meals from the fridge", "Excess raw watery foods", "Salty treats"]
+    bestProteins: ["Lamb", "Beef", "Pork", "Chicken", "Turkey", "Duck", "Egg whites", "Mackerel", "Sardines", "Lean venison"],
+    bestVegetables: ["Kale", "Sweet potato", "Carrot", "Pumpkin", "Green beans", "Squash", "Parsley", "Parsnip", "Beet greens", "Shiitake mushroom"],
+    smartCarbs: ["Sweet potato", "Oats", "Brown rice", "Millet", "Pumpkin", "Buckwheat", "Butternut squash"],
+    healthyFats: ["Egg yolk", "Salmon oil", "Hemp seed oil", "Ground flaxseed", "Sardines", "Green-lipped mussel oil"],
+    boosters: ["Bone broth", "Green-lipped mussel", "Turmeric", "Blueberries", "Cranberry", "Kelp in small amounts", "Rosehip powder"],
+    useModerately: ["Very cooling proteins", "Cold meals from the fridge", "Excess raw watery foods", "Salty treats", "Large fish portions"]
   },
   Wood: {
-    bestProteins: ["Rabbit", "Duck", "Turkey", "White fish", "Lean beef", "Pork", "Egg whites"],
-    bestVegetables: ["Dandelion greens", "Zucchini", "Spinach", "Broccoli", "Green beans", "Celery", "Bok choy"],
-    smartCarbs: ["Barley", "Quinoa", "Pumpkin", "Millet"],
-    healthyFats: ["Salmon oil", "Sardines", "Ground flaxseed", "Hemp seed oil"],
-    boosters: ["Blueberries", "Parsley", "Turmeric", "Cranberry", "Chia seeds"],
-    useModerately: ["Very fatty meals", "Excess lamb", "Overly rich treats", "High-sodium toppers"]
+    bestProteins: ["Rabbit", "Duck", "Turkey", "White fish", "Lean beef", "Pork", "Egg whites", "Cod", "Quail", "Lean venison"],
+    bestVegetables: ["Dandelion greens", "Zucchini", "Spinach", "Broccoli", "Green beans", "Celery", "Bok choy", "Watercress", "Romaine", "Asparagus"],
+    smartCarbs: ["Barley", "Quinoa", "Pumpkin", "Millet", "Amaranth", "Butternut squash"],
+    healthyFats: ["Salmon oil", "Sardines", "Ground flaxseed", "Hemp seed oil", "Anchovy oil", "Chia seeds"],
+    boosters: ["Blueberries", "Parsley", "Turmeric", "Cranberry", "Chia seeds", "Dandelion greens", "Milk thistle discussed with your vet"],
+    useModerately: ["Very fatty meals", "Excess lamb", "Overly rich treats", "High-sodium toppers", "Too many warming proteins"]
   }
 };
 
@@ -233,10 +233,14 @@ const supportFriendlyIngredients = {
     "Lean turkey",
     "White fish",
     "Egg whites",
+    "Lean chicken",
     "Salmon oil or sardines for EPA/DHA",
     "Pumpkin",
     "Green beans",
     "Blueberries",
+    "Zucchini",
+    "Oats",
+    "Cranberry",
     "Unsalted bone broth only"
   ],
   kidney: [
@@ -246,6 +250,9 @@ const supportFriendlyIngredients = {
     "Zucchini",
     "Green beans",
     "Carrots",
+    "Butternut squash",
+    "White fish only if vet-approved",
+    "Lean turkey only if vet-approved",
     "Low-sodium moisture-rich meals",
     "Fish oil discussed with your vet"
   ],
@@ -254,10 +261,14 @@ const supportFriendlyIngredients = {
     "Freshly cooked rabbit",
     "Freshly cooked pork",
     "Freshly cooked white fish if tolerated",
+    "Freshly cooked quail",
+    "Freshly cooked duck if tolerated",
     "Zucchini",
     "Carrot",
     "Pumpkin",
-    "Blueberries"
+    "Blueberries",
+    "Cucumber",
+    "Romaine"
   ],
   liver: [
     "Turkey",
@@ -267,6 +278,9 @@ const supportFriendlyIngredients = {
     "Pumpkin",
     "Carrot",
     "Zucchini",
+    "White rice",
+    "Oats",
+    "Blueberries",
     "Low-copper ingredient choices discussed with your vet"
   ]
 };
@@ -574,19 +588,20 @@ function buildIngredientProfile(
       ...energyAdditions.bestProteins,
       ...primary.bestProteins,
       ...secondary.bestProteins
-    ], 6),
+    ], 8),
     bestVegetables: uniqueFirst([
       ...energyAdditions.bestVegetables,
       ...primary.bestVegetables,
       ...secondary.bestVegetables
-    ], 6),
-    healthyFats: uniqueFirst([...primary.healthyFats, ...secondary.healthyFats], 5),
-    boosters: uniqueFirst([...(goalBoosters[goal] || []), ...primary.boosters, ...secondary.boosters], 5),
+    ], 8),
+    smartCarbs: uniqueFirst([...(primary.smartCarbs || []), ...(secondary.smartCarbs || [])], 6),
+    healthyFats: uniqueFirst([...primary.healthyFats, ...secondary.healthyFats], 6),
+    boosters: uniqueFirst([...(goalBoosters[goal] || []), ...primary.boosters, ...secondary.boosters], 7),
     useModerately: uniqueFirst([
       ...energyAdditions.useModerately,
       ...primary.useModerately,
       ...secondary.useModerately
-    ], 5),
+    ], 6),
     heartFriendly: buildSupportList("heart", primaryElement, secondaryElement, energyType),
     kidneyFriendly: buildSupportList("kidney", primaryElement, secondaryElement, energyType),
     lowHistamineFriendly: buildSupportList("histamine", primaryElement, secondaryElement, energyType),

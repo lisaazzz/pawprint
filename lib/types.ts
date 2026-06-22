@@ -40,6 +40,7 @@ export type Result = {
   ingredientProfile: {
     bestProteins: string[];
     bestVegetables: string[];
+    smartCarbs: string[];
     healthyFats: string[];
     boosters: string[];
     useModerately: string[];

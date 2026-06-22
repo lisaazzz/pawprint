@@ -297,6 +297,7 @@ function buildCustomerRecordRows(answers: QuizAnswers, result: ReturnType<typeof
     ["Recipe wellness reasons", result.recipes.flatMap((recipe) => recipe.wellnessReasons).join("; ")],
     ["Ingredient proteins", result.ingredientProfile.bestProteins.join("; ")],
     ["Ingredient vegetables", result.ingredientProfile.bestVegetables.join("; ")],
+    ["Smart carbs", result.ingredientProfile.smartCarbs.join("; ")],
     ["Healthy fats", result.ingredientProfile.healthyFats.join("; ")],
     ["Optional toppers", result.ingredientProfile.boosters.join("; ")],
     ["Use moderately", result.ingredientProfile.useModerately.join("; ")],
@@ -878,9 +879,10 @@ function Results({
             nutrition professional. They are not a complete recipe, prescription, or substitute for a
             complete and balanced diet.
           </p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <IngredientGroup title="Proteins to Explore" items={result.ingredientProfile.bestProteins} />
             <IngredientGroup title="Vegetables" items={result.ingredientProfile.bestVegetables} />
+            <IngredientGroup title="Smart Carbs" items={result.ingredientProfile.smartCarbs} />
             <IngredientGroup title="Healthy Fats" items={result.ingredientProfile.healthyFats} />
             <IngredientGroup title="Optional Toppers" items={result.ingredientProfile.boosters} />
             <IngredientGroup
