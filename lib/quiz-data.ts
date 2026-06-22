@@ -82,23 +82,89 @@ export const ownerGoals = [
 ];
 
 export const recipes: Recipe[] = [
-  { name: "GC Beef Greens", thermal: "Neutral-Warming", elements: ["Earth", "Metal"] },
-  { name: "GC Chicken Harmony", thermal: "Neutral-Warming", elements: ["Earth"] },
-  { name: "GC Porky Beefy", thermal: "Neutral-Warming", elements: ["Earth", "Water"] },
-  { name: "GC Rabbit Sockeye", thermal: "Cooling", elements: ["Fire", "Wood"] },
-  { name: "GC Pork Complete", thermal: "Cooling-Neutral", elements: ["Fire", "Metal"] },
-  { name: "GC Turkey Recipe", thermal: "Neutral", elements: ["Earth", "Wood"] },
-  { name: "Chicken Recipe", thermal: "Neutral-Warming", elements: ["Earth"] },
-  { name: "Pork Red", thermal: "Neutral-Cooling", elements: ["Fire", "Wood"] },
-  { name: "Beef Dandelion Zucchini", thermal: "Neutral-Warming", elements: ["Earth", "Wood"] },
-  { name: "Duck Recipe", thermal: "Cooling", elements: ["Fire", "Wood", "Metal"] },
-  { name: "Lamb Recipe", thermal: "Warming", elements: ["Water"] }
+  {
+    name: "GC Beef Greens",
+    thermal: "Neutral-Warming",
+    elements: ["Earth", "Metal", "Water"],
+    keyIngredients: ["Beef", "Beef heart", "Mackerel", "Broccoli", "Butternut squash"],
+    ingredients: ["Beef", "Beef heart", "Beef lung", "Beef liver", "Mackerel", "Broccoli", "Green beans", "Butternut squash", "Egg", "Pumpkin seeds", "Nutritional yeast", "Kelp", "Eggshell", "Vitamin E", "Manganese", "Sea salt"]
+  },
+  {
+    name: "GC Chicken Harmony",
+    thermal: "Warming",
+    elements: ["Earth", "Water"],
+    keyIngredients: ["Chicken thigh", "Omega-3 egg", "Pak choi", "Japanese sweet potato", "Ginger root"],
+    ingredients: ["Chicken thigh", "Chicken liver", "Chicken heart", "Omega-3 egg", "Pak choi", "Japanese sweet potato", "Button mushroom", "Ginger root", "Cod liver oil", "Kelp", "Eggshell", "Cinnamon", "Flaxseed", "Zinc picolinate", "Vitamin E"]
+  },
+  {
+    name: "GC Porky Beefy",
+    thermal: "Neutral-Warming",
+    elements: ["Earth", "Water"],
+    keyIngredients: ["Lean pork", "Pork kidney", "Beef liver", "Sardines", "Shiitake mushroom"],
+    ingredients: ["Lean pork", "Pork heart", "Pork kidney", "Beef liver", "Sardines", "Broccoli", "Green beans", "Shiitake mushroom", "Blueberries", "Turmeric", "Kelp", "Flaxseed", "Eggshell", "Zinc picolinate", "Vitamin E", "Sea salt"]
+  },
+  {
+    name: "GC Rabbit Sockeye",
+    thermal: "Cooling-Neutral",
+    elements: ["Fire", "Wood", "Water"],
+    keyIngredients: ["Rabbit", "Sockeye salmon", "Green beans", "Cauliflower", "Cranberry"],
+    ingredients: ["Rabbit", "Duck liver", "Sockeye salmon", "Egg", "Green beans", "Cauliflower", "Shiitake mushroom", "Cranberry", "Kelp", "Eggshell", "Vitamin E", "Nutritional yeast", "Zinc", "Ginger", "Manganese", "Flaxseed"]
+  },
+  {
+    name: "GC Pork Complete",
+    thermal: "Cooling-Neutral",
+    elements: ["Fire", "Metal", "Water"],
+    keyIngredients: ["Pork", "Pork heart", "Sardines", "Kale", "Zucchini"],
+    ingredients: ["Pork", "Pork heart", "Pork liver", "Pork kidney", "Sardines", "Kale", "Romaine lettuce", "Zucchini", "Sea salt", "Turmeric", "Eggshell", "Flaxseed", "Kelp", "Manganese", "Vitamin E"]
+  },
+  {
+    name: "GC Turkey Recipe",
+    thermal: "Neutral-Warming",
+    elements: ["Earth", "Wood"],
+    keyIngredients: ["Ground turkey", "Turkey heart", "Butternut squash", "Pak choi", "Green beans"],
+    ingredients: ["Ground turkey", "Turkey heart", "Turkey liver", "Butternut squash", "Pak choi", "Green beans", "Mushroom", "Ginger", "Flaxseed", "Eggshell", "Kelp", "Turmeric"]
+  },
+  {
+    name: "Raw Chicken Recipe",
+    thermal: "Warming",
+    elements: ["Earth", "Metal"],
+    keyIngredients: ["Chicken", "Egg", "Chicken liver", "Spinach", "Cod liver oil"],
+    ingredients: ["Chicken", "Egg", "Chicken liver", "Mushroom", "Spinach", "Chia seed", "Pumpkin seeds", "Eggshell", "Ginger", "Zinc", "Sea salt", "Kelp", "Cod liver oil", "Nutritional yeast"]
+  },
+  {
+    name: "Raw Pork Red",
+    thermal: "Neutral-Cooling",
+    elements: ["Fire", "Wood", "Water"],
+    keyIngredients: ["Pork", "Sardines", "Red cabbage", "Dandelion greens", "Celery"],
+    ingredients: ["Pork", "Sardines", "Pork liver", "Pork heart", "Pork spleen", "Shiitake mushroom", "Celery", "Butternut squash", "Red cabbage", "Coriander", "Dandelion greens", "Zinc", "Kelp", "Vitamin E", "Manganese", "Eggshell"]
+  },
+  {
+    name: "Raw Beef Dandelion Zucchini",
+    thermal: "Neutral-Warming",
+    elements: ["Earth", "Wood", "Water"],
+    keyIngredients: ["Beef", "Mackerel", "Dandelion greens", "Zucchini", "Sweet potato"],
+    ingredients: ["Beef", "Beef heart", "Beef liver", "Mackerel", "Broccoli", "Zucchini", "Dandelion greens", "Mushroom", "Turmeric", "Black pepper", "Eggshell", "Sweet potato", "Sea salt", "Manganese", "Kelp", "Wheatgrass", "Beef MDM", "Sunflower seeds"]
+  },
+  {
+    name: "Raw Duck Recipe",
+    thermal: "Cooling",
+    elements: ["Fire", "Wood", "Metal"],
+    keyIngredients: ["Duck", "Duck heart", "Dandelion greens", "Cucumber", "Cod liver oil"],
+    ingredients: ["Duck", "Duck gizzard", "Duck heart", "Beef liver", "Egg", "Broccoli", "Dandelion greens", "Cucumber", "Shiitake mushroom", "Cod liver oil", "Eggshell", "Cinnamon", "Kelp", "Pumpkin seeds", "Black pepper", "Zinc", "Sea salt"]
+  },
+  {
+    name: "Raw Lamb Recipe",
+    thermal: "Warming",
+    elements: ["Water", "Earth"],
+    keyIngredients: ["Lamb", "Lamb heart", "Mackerel", "Carrot", "Pak choi"],
+    ingredients: ["Lamb", "Lamb heart", "Lamb lung", "Beef liver", "Mackerel", "Egg", "Carrot", "Pak choi", "Sunflower seeds", "Eggshell", "Oregano", "Manganese", "Zinc", "Kelp", "Wheat germ oil"]
+  }
 ];
 
 export const baseRecommendations: Record<ElementType, string[]> = {
-  Fire: ["GC Rabbit Sockeye", "Duck Recipe", "GC Pork Complete"],
+  Fire: ["GC Rabbit Sockeye", "Raw Duck Recipe", "GC Pork Complete"],
   Earth: ["GC Turkey Recipe", "GC Chicken Harmony", "GC Beef Greens"],
-  Metal: ["Duck Recipe", "GC Pork Complete", "GC Beef Greens"],
-  Water: ["Lamb Recipe", "GC Porky Beefy", "GC Chicken Harmony"],
-  Wood: ["GC Rabbit Sockeye", "Duck Recipe", "Beef Dandelion Zucchini"]
+  Metal: ["Raw Duck Recipe", "GC Pork Complete", "GC Beef Greens"],
+  Water: ["Raw Lamb Recipe", "GC Porky Beefy", "GC Chicken Harmony"],
+  Wood: ["GC Rabbit Sockeye", "Raw Duck Recipe", "Raw Beef Dandelion Zucchini"]
 };

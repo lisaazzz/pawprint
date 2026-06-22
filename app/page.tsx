@@ -967,7 +967,7 @@ function Results({
                   Key Ingredients
                 </p>
                 <p className="text-sm font-semibold leading-6 text-neutral-700">
-                  {recipeIngredients(recipe.name).join(" • ")}
+                  {recipe.keyIngredients.join(" • ")}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3 text-sm font-semibold">
@@ -1196,78 +1196,61 @@ function recipeBadge(index: number) {
   return index === 0 ? "Best Match" : index === 1 ? "Excellent Match" : "Good Match";
 }
 
-function recipeIngredients(name: string) {
-  const ingredients: Record<string, string[]> = {
-    "GC Beef Greens": ["Beef", "Leafy greens", "Zucchini", "Parsley", "Omega-rich oil"],
-    "GC Chicken Harmony": ["Chicken", "Pumpkin", "Carrot", "Green beans", "Bone broth"],
-    "GC Porky Beefy": ["Pork", "Beef", "Sweet potato", "Carrot", "Omega-rich oil"],
-    "GC Rabbit Sockeye": ["Rabbit", "Sockeye salmon", "Zucchini", "Spinach", "Blueberries"],
-    "GC Pork Complete": ["Pork", "Leafy greens", "Pumpkin", "Carrot", "Hemp seed oil"],
-    "GC Turkey Recipe": ["Turkey", "Pumpkin", "Green beans", "Carrot", "Blueberries"],
-    "Chicken Recipe": ["Chicken", "Pumpkin", "Carrot", "Green beans", "Egg"],
-    "Pork Red": ["Pork", "Red vegetables", "Zucchini", "Leafy greens", "Omega-rich oil"],
-    "Beef Dandelion Zucchini": ["Beef", "Dandelion greens", "Zucchini", "Carrot", "Parsley"],
-    "Duck Recipe": ["Duck", "Zucchini", "Leafy greens", "Blueberries", "Omega-rich oil"],
-    "Lamb Recipe": ["Lamb", "Carrot", "Sweet potato", "Kale", "Omega-rich oil"]
-  };
-  return ingredients[name] || ["Whole protein", "Vegetables", "Moisture", "Balanced fats"];
-}
-
 function recipeSpecificBenefits(name: string) {
   const benefits: Record<string, string[]> = {
     "GC Beef Greens": [
-      "Beef and greens offer steady, mineral-rich nourishment",
-      "Works well when a grounding Earth-Metal recipe is useful",
-      "A practical option for dogs needing vitality without an overly cooling profile"
+      "Beef organs and mackerel make this a nutrient-dense Earth-Metal recipe",
+      "Broccoli, green beans, and squash add grounding vegetable support",
+      "Best for dogs who need steady vitality with a neutral-warming profile"
     ],
     "GC Chicken Harmony": [
-      "Chicken and pumpkin make this a gentle, easy-to-understand meal profile",
-      "Especially useful when digestion and steady routine are priorities",
-      "Neutral-warming support can suit dogs who need comfort without excess richness"
+      "Chicken thigh, heart, and liver create a warming comfort-food profile",
+      "Japanese sweet potato and pak choi support Earth-style steadiness",
+      "Ginger and cinnamon make this better suited to Yin or comfort-seeking dogs"
     ],
     "GC Porky Beefy": [
-      "Pork and beef provide deeper nourishment for dogs needing more substance",
-      "A strong Water-Earth option for comfort, mobility, and healthy aging goals",
-      "Helpful when the profile calls for warmth and sustained energy"
+      "Pork kidney, sardines, and beef liver make this a strong Water-Earth formula",
+      "Shiitake, turmeric, and blueberries add mobility and antioxidant-style support",
+      "Helpful when the profile calls for deeper nourishment and sustained energy"
     ],
     "GC Rabbit Sockeye": [
-      "Rabbit keeps the profile light while sockeye brings omega-rich support",
-      "A standout cooling choice for warm, itchy, or skin-focused profiles",
-      "Good for active Fire or Wood dogs who need balance without heaviness"
+      "Rabbit keeps the protein profile light while sockeye adds omega-rich support",
+      "Cauliflower, green beans, and cranberry suit warm or skin-focused profiles",
+      "A strong Fire-Wood option when cooling balance matters"
     ],
     "GC Pork Complete": [
-      "Pork gives satisfying nourishment while the cooling-neutral profile keeps it balanced",
-      "Useful when Fire or Metal traits need support without pushing too much warmth",
+      "Pork organs and sardines give substance without losing cooling-neutral balance",
+      "Kale, romaine, and zucchini make this useful for Fire-Metal profiles",
       "A polished middle path for dogs who need skin support and steady fuel"
     ],
     "GC Turkey Recipe": [
-      "Turkey offers a lean, neutral base that is easy to rotate",
-      "A smart choice for weight, digestion, or balanced-energy goals",
-      "Pairs well with Earth and Wood profiles that need clean, steady fuel"
+      "Turkey heart and liver create a lean, balanced foundation",
+      "Butternut squash, pak choi, and green beans support Earth-Wood steadiness",
+      "A smart choice for weight, digestion, or balanced-energy goals"
     ],
-    "Chicken Recipe": [
-      "Chicken is familiar and gentle for many dogs when transitions need to be simple",
-      "Supports Earth-style digestion and routine-focused feeding",
-      "Best suited as a steady, uncomplicated comfort recipe"
+    "Raw Chicken Recipe": [
+      "Chicken, egg, and chicken liver make this a classic warming raw profile",
+      "Spinach, mushroom, chia, and pumpkin seeds add mineral and fiber variety",
+      "Best suited to dogs who do well with familiar proteins and warming support"
     ],
-    "Pork Red": [
-      "Pork with cooling-supportive red ingredients fits warm, expressive profiles",
-      "Useful when skin, coat, and antioxidant support are part of the picture",
-      "A flavorful option for Fire-Wood tendencies without going too warming"
+    "Raw Pork Red": [
+      "Pork organs and sardines pair with red cabbage and dandelion greens",
+      "A strong Fire-Wood-Water option for skin, coat, and green support",
+      "Useful when antioxidant-style vegetables are part of the picture"
     ],
-    "Beef Dandelion Zucchini": [
-      "Beef supports vitality while dandelion and zucchini add green balance",
-      "A good fit for Wood dogs who benefit from liver-style green support",
+    "Raw Beef Dandelion Zucchini": [
+      "Beef and mackerel support vitality while dandelion and zucchini add green balance",
+      "Sweet potato and wheatgrass make this a stronger Earth-Wood recipe",
       "Works well when the goal is grounded energy with lighter vegetable support"
     ],
-    "Duck Recipe": [
-      "Duck brings rich flavor while staying cooling in this recipe profile",
-      "A strong option for warm dogs who need skin, coat, or seasonal comfort support",
-      "Fits Fire, Wood, and Metal patterns with a more premium rotation feel"
+    "Raw Duck Recipe": [
+      "Duck, cucumber, and dandelion greens make this one of the clearest cooling recipes",
+      "Cod liver oil and egg add richness without changing the cooling direction",
+      "Fits Fire, Wood, and Metal patterns with a premium rotation feel"
     ],
-    "Lamb Recipe": [
-      "Lamb provides warming nourishment for dogs who seek comfort and warmth",
-      "A strong Water-style option for aging, mobility, or low-energy profiles",
+    "Raw Lamb Recipe": [
+      "Lamb heart, lung, and mackerel create a warming Water-Earth profile",
+      "Carrot, pak choi, and wheat germ oil support comfort and nourishment",
       "Best when the plan calls for deeper warmth rather than cooling balance"
     ]
   };

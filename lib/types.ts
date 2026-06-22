@@ -22,6 +22,8 @@ export type Recipe = {
   name: string;
   thermal: string;
   elements: ElementType[];
+  ingredients: string[];
+  keyIngredients: string[];
 };
 
 export type Result = {

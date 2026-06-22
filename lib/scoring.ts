@@ -32,9 +32,9 @@ const wellnessRecipeRules: Array<{
     label: "Skin and coat tendencies: prioritizes cooling, moisture-rich, omega-supportive recipes.",
     recipeBoosts: {
       "GC Rabbit Sockeye": 7,
-      "Duck Recipe": 6,
+      "Raw Duck Recipe": 6,
       "GC Pork Complete": 4,
-      "Pork Red": 3
+      "Raw Pork Red": 3
     },
     thermalBoost: "cooling",
     elementBoost: "Fire"
@@ -45,7 +45,7 @@ const wellnessRecipeRules: Array<{
     recipeBoosts: {
       "GC Chicken Harmony": 7,
       "GC Turkey Recipe": 6,
-      "Chicken Recipe": 5,
+      "Raw Chicken Recipe": 5,
       "GC Beef Greens": 4
     },
     thermalBoost: "neutral",
@@ -55,7 +55,7 @@ const wellnessRecipeRules: Array<{
     matches: ["Arthritis"],
     label: "Arthritis or mobility support: prioritizes Water-supportive and gently warming recipes.",
     recipeBoosts: {
-      "Lamb Recipe": 7,
+      "Raw Lamb Recipe": 7,
       "GC Porky Beefy": 6,
       "GC Chicken Harmony": 4
     },
@@ -68,8 +68,8 @@ const wellnessRecipeRules: Array<{
     recipeBoosts: {
       "GC Turkey Recipe": 7,
       "GC Rabbit Sockeye": 5,
-      "Duck Recipe": 4,
-      "Chicken Recipe": 4
+      "Raw Duck Recipe": 4,
+      "Raw Chicken Recipe": 4
     },
     thermalBoost: "neutral",
     elementBoost: "Earth"
@@ -81,7 +81,7 @@ const wellnessRecipeRules: Array<{
       "GC Turkey Recipe": 6,
       "GC Chicken Harmony": 6,
       "GC Beef Greens": 4,
-      "Chicken Recipe": 4
+      "Raw Chicken Recipe": 4
     },
     thermalBoost: "neutral",
     elementBoost: "Earth"
@@ -90,10 +90,10 @@ const wellnessRecipeRules: Array<{
     matches: ["Cold intolerance"],
     label: "Cold sensitivity: prioritizes warming, nourishing recipes while keeping transitions gentle.",
     recipeBoosts: {
-      "Lamb Recipe": 7,
+      "Raw Lamb Recipe": 7,
       "GC Porky Beefy": 6,
       "GC Chicken Harmony": 4,
-      "Chicken Recipe": 3
+      "Raw Chicken Recipe": 3
     },
     thermalBoost: "warming",
     elementBoost: "Water"
@@ -406,9 +406,9 @@ function recommendRecipes(
 
   const energyPriority =
     energyType === "Yang"
-      ? ["GC Rabbit Sockeye", "Duck Recipe", "GC Pork Complete"]
+      ? ["GC Rabbit Sockeye", "Raw Duck Recipe", "GC Pork Complete"]
       : energyType === "Yin"
-        ? ["Lamb Recipe", "GC Porky Beefy", "GC Chicken Harmony"]
+        ? ["Raw Lamb Recipe", "GC Porky Beefy", "GC Chicken Harmony"]
         : ["GC Turkey Recipe", "GC Chicken Harmony", "GC Beef Greens"];
 
   energyPriority.forEach((name) => preferred.add(name));
@@ -453,7 +453,7 @@ function scoreRecipe(
   if (energyType === "Yang" && recipe.thermal.toLowerCase().includes("cool")) score += 5;
   if (energyType === "Yin" && recipe.thermal.toLowerCase().includes("warm")) score += 5;
   if (energyType === "Balanced" && recipe.thermal.includes("Neutral")) score += 4;
-  if (goal === "Skin & coat support" && ["GC Rabbit Sockeye", "Duck Recipe"].includes(recipe.name)) {
+  if (goal === "Skin & coat support" && ["GC Rabbit Sockeye", "Raw Duck Recipe"].includes(recipe.name)) {
     score += 2;
   }
   if (goal === "Better digestion" && recipe.elements.includes("Earth")) score += 2;
