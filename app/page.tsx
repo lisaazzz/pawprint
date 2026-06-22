@@ -56,6 +56,7 @@ const emptyAnswers: QuizAnswers = {
 const steps = ["Profile", "Personality", "Energy", "Wellness", "Goal", "Results"];
 const storageKey = "pawprint-quiz-v1";
 const recordEmail = "holisticpawfood@gmail.com";
+const whatsappNumber = "628999009316";
 
 export default function Home() {
   const [started, setStarted] = useState(false);
@@ -1025,7 +1026,7 @@ function Results({
             </p>
           </div>
           <Button asChild variant="secondary" size="lg">
-            <a href={`https://wa.me/?text=${whatsappText}`} target="_blank" rel="noreferrer">
+            <a href={`https://wa.me/${whatsappNumber}?text=${whatsappText}`} target="_blank" rel="noreferrer">
               <MessageCircle className="h-5 w-5" />
               Chat on WhatsApp
             </a>
